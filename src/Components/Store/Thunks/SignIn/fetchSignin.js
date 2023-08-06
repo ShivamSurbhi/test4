@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const fetchSignin = createAsyncThunk("user", async (payload) => {
-  let response = await axios.get(process.env.REACT_APP_API_URL + "users");
+  let response = await axios.get("api/users");
   let checkData = response.data.filter(
     (v) => v.email == payload.email && v.password == payload.password
   );
