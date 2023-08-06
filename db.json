@@ -1,0 +1,76 @@
+{
+  "users": [
+    {
+      "email": "shivamsurbshokeen@gmail.com",
+      "password": "12",
+      "age": "10",
+      "username": "test",
+      "id": 3
+    },
+    {
+      "email": "surbhi@gmail.com",
+      "password": "9773658462",
+      "age": "20",
+      "username": "Surbhi",
+      "id": 4
+    },
+    {
+      "email": "test@gmail.com",
+      "password": "Shivam@2023",
+      "age": "19",
+      "username": "Shivam",
+      "id": 5
+    },
+    {
+      "id": 6
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "name": "Samsung",
+      "description": "New Product",
+      "image": "https://m.media-amazon.com/images/I/61Tl1z+Hn0L._AC_UY218_.jpg",
+      "price": 99000
+    },
+    {
+      "id": 2,
+      "name": "Apple",
+      "description": "New Product",
+      "image": "https://m.media-amazon.com/images/I/71yzJoE7WlL._AC_UY218_.jpg",
+      "price": 100000
+    },
+    {
+      "name": "sdf",
+      "description": "22",
+      "image": "https://m.media-amazon.com/images/I/61Tl1z+Hn0L._AC_UY218_.jpg",
+      "price": "22",
+      "category": "4",
+      "id": 3
+    },
+    {
+      "name": "sdfsdf",
+      "description": "234234",
+      "image": "https://m.media-amazon.com/images/I/61Tl1z+Hn0L._AC_UY218_.jpg",
+      "price": "234",
+      "category": "4",
+      "id": 4
+    },
+    {
+      "name": "sdffadsf",
+      "description": "234234",
+      "image": "https://m.media-amazon.com/images/I/61Tl1z+Hn0L._AC_UY218_.jpg",
+      "price": "324",
+      "category": "3",
+      "id": 5
+    },
+    {
+      "name": "asdasdasdasd",
+      "description": "232323",
+      "image": "https://m.media-amazon.com/images/I/61Tl1z+Hn0L._AC_UY218_.jpg",
+      "price": "2323",
+      "category": "4",
+      "id": 6
+    }
+  ]
+}
