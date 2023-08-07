@@ -63,13 +63,20 @@ const Product = () => {
     },
   ];
 
+   const [localCart, setLocalCart] = useState();
+
   useEffect(() => {
+    getCountLocal();
     console.clear();
     console.log("use effect");
     getProduct();
     // handleSort()
   }, []);
 
+  const getCountLocal = () => {
+    var localC = JSON.parse(localStorage.getItem("cart"));
+    setLocalCart(localC);
+  }
   const getProduct = () => {
     dispatch(GetProductThunk());
     // setProduct(data?.length > 0 ? data : []);
@@ -192,7 +199,30 @@ const Product = () => {
     } else {
       localStorage.setItem("cart", JSON.stringify([shareData]));
     }
+    getCountLocal();
   };
+
+  const removeCart = (data) => {
+    if (data?.id) {
+      let findId = localCart.findIndex((v) => v.id == data.id);
+      let updateData = localCart.find((v) => v.id == data.id);
+      if (updateData?.qty > 1) {
+        updateData.qty = updateData.qty - 1;
+        localCart.splice(findId, 1);
+        localCart.push(updateData);
+        localStorage.setItem("cart", JSON.stringify(localCart));
+      } else {
+        // Find ID & Slice it
+
+        if (findId != -1) {
+          localCart.splice(findId, 1);
+          localStorage.setItem("cart", JSON.stringify(localCart));
+        }
+        // Find ID & Slice it
+      }
+    }
+    getCountLocal();
+  }
 
   return (
     <Fragment>
@@ -232,6 +262,18 @@ const Product = () => {
                   >
                     Add to Cart
                   </button>
+
+                  <i
+                    className="fa-solid fa-plus text-success cursorPointer"
+                    onClick={(e) => addCart(item)}
+                  ></i>
+                  <span>{localCart?.length}</span>
+
+                  <i
+                    className="fa-solid fa-minus text-danger cursorPointer"
+                    onClick={(e) => removeCart(item)}
+                  ></i>
+
                   <button className="btn btn-success mx-2">Buy Now</button>
                   <div></div>
                 </div>
