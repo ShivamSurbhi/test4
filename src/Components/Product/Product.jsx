@@ -38,7 +38,7 @@ const Product = () => {
 
   const getProduct = () => {
     dispatch(GetProductThunk());
-    setProduct(data);
+    setProduct(data?.length > 0 ? data : []);
   }
   
   const handleSort = () => {
@@ -142,7 +142,7 @@ const Product = () => {
         <div className="row mt-2">
           <div className="col-3"></div>
           <div className="col-9">
-            {productList.map((item, index) => (
+            {productList?.map((item, index) => (
               <div className="row mt-2" key={index}>
                 <div className="col-3">
                   <img
