@@ -1,5 +1,4 @@
-import { Fragment } from "react";
-import RouterLink from "../Link-Handler/RouterLink";
+import { Fragment, useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import SignUp from "../SignUp-SignIn/SignUp";
 import Welcome from "../Welcome/Welcome";
@@ -49,6 +48,13 @@ const Menu = () => {
     },
   ];
 
+  const [cartNo, setCartNo] = useState();
+
+  useEffect(() => {
+    var localCart = JSON.parse(localStorage.getItem('cart'));
+    setCartNo(localCart);
+  }, [])
+  
   const renderElement = menuList.map((v, i) => {
     return (
       <Fragment key={i}>
@@ -66,51 +72,74 @@ const Menu = () => {
   return (
     <Fragment>
       <Router>
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
-          <a className="navbar-brand">
-            Navbar
-          </a>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
+        <nav className="navbar navbar-expand-lg bg-body-tertiary navbar-light bg-light">
+          <div className="container-fluid">
+            <a className="navbar-brand" href="#">
+              Navbar
+            </a>
+            <button
+              className="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span className="navbar-toggler-icon"></span>
+            </button>
+            <div
+              className="collapse navbar-collapse"
+              id="navbarSupportedContent"
+            >
+              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                {renderElement}
+              </ul>
 
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav mr-auto">
-              {renderElement}
-              <li className="nav-item dropdown">
+              <div className="dropdown">
                 <a
                   className="nav-link dropdown-toggle"
-                
-                  id="navbarDropdown"
+                  href="javascript:void(0)"
                   role="button"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
+                  data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  Dropdown
+                  Hello, Shivam<br></br>
+                  <b>Account</b>
                 </a>
-                <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a className="dropdown-item">
-                    Action
-                  </a>
-                  <a className="dropdown-item">
-                    Another action
-                  </a>
-                  <div className="dropdown-divider"></div>
-                  <a className="dropdown-item">
-                    Something else here
-                  </a>
-                </div>
-              </li>
-            </ul>
+
+                <ul className="dropdown-menu">
+                  <li>
+                    <a className="dropdown-item" href="javascript:void(0)">
+                      Profile
+                    </a>
+                  </li>
+                  <li>
+                    <a className="dropdown-item" href="javascript:void(0)">
+                      Change Password
+                    </a>
+                  </li>
+                  <li>
+                    <a className="dropdown-item" href="javascript:void(0)">
+                      Logout
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+              <button
+                type="button"
+                class="btn btn-light position-relative mx-3"
+              >
+                Cart
+                {cartNo?.length > 0 && (
+                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    {cartNo?.length}
+                    <span class="visually-hidden">unread messages</span>
+                  </span>
+                )}
+              </button>
+            </div>
           </div>
         </nav>
 

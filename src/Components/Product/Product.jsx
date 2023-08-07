@@ -1,7 +1,8 @@
-import { Fragment, useContext, useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GetProductThunk } from "../Store/Thunks/Product/GetProductThunk";
 import AddProdThunk from "../Store/Thunks/Product/AddProdThunk";
+import { type } from "@testing-library/user-event/dist/type";
 
 const Product = () => {
   const dispatch = useDispatch();
@@ -18,34 +19,73 @@ const Product = () => {
     price: "",
     category: "",
   };
-   const formErrorInitialState = {
-     name: "",
-     description: "",
-     image: "",
-     price: "",
-     category: "",
-   };
+  const formErrorInitialState = {
+    name: "",
+    description: "",
+    image: "",
+    price: "",
+    category: "",
+  };
   const [formData, setFormData] = useState(formInitialState);
   const [formErr, setErrData] = useState(formErrorInitialState);
   const [productList, setProduct] = useState([]);
-  
+
+  var sampleData = [
+    {
+      id: 1,
+      name: "Samsung",
+      description: "New Product",
+      image: "https://m.media-amazon.com/images/I/61Tl1z+Hn0L._AC_UY218_.jpg",
+      price: 99000,
+      qty: 0,
+      user_id: 1,
+      category: ["Electronic"],
+    },
+    {
+      id: 2,
+      name: "Apple",
+      description: "New Product",
+      image: "https://m.media-amazon.com/images/I/71yzJoE7WlL._AC_UY218_.jpg",
+      price: 100000,
+      qty: 0,
+      user_id: 2,
+      category: ["Electronic"],
+    },
+    {
+      id: 3,
+      name: "Oneplus",
+      description: "22",
+      image: "https://m.media-amazon.com/images/I/61Tl1z+Hn0L._AC_UY218_.jpg",
+      price: "22",
+      category: ["Electronic"],
+      user_id: 3,
+      qty: 0,
+    },
+  ];
+
+   const [localCart, setLocalCart] = useState();
+
   useEffect(() => {
+    getCountLocal();
     console.clear();
     console.log("use effect");
     getProduct();
     // handleSort()
   }, []);
 
+  const getCountLocal = () => {
+    var localC = JSON.parse(localStorage.getItem("cart"));
+    setLocalCart(localC);
+  }
   const getProduct = () => {
     dispatch(GetProductThunk());
-    setProduct(data?.length > 0 ? data : []);
-  }
-  
+    // setProduct(data?.length > 0 ? data : []);
+    setProduct(data?.length > 0 ? data : sampleData);
+  };
+
   const handleSort = () => {
     const sortedItems = [...productList]; // Create a copy of the array
-   console.log("sortedItems", sortedItems);
     sortedItems.sort((a, b) => b.id - a.id); // Sort the copy
-    console.log("sortedItems", sortedItems);
     setProduct(sortedItems); // Update the state with the sorted array
   };
 
@@ -65,7 +105,7 @@ const Product = () => {
 
   const formSave = () => {
     console.log("formData", formData);
-     setFormData(formInitialState);
+    setFormData(formInitialState);
 
     let errObj = {
       name: "",
@@ -106,16 +146,15 @@ const Product = () => {
       setErrData(errObj);
     }
 
-        const isObjectEmpty = Object.values(errObj).every((value) => {
-          return (
-            value === null ||
-            value === undefined ||
-            value === "" ||
-            (Array.isArray(value) && value.length === 0)
-          );
-        });
-    
-    
+    const isObjectEmpty = Object.values(errObj).every((value) => {
+      return (
+        value === null ||
+        value === undefined ||
+        value === "" ||
+        (Array.isArray(value) && value.length === 0)
+      );
+    });
+
     setTimeout(() => {
       setErrData(formErrorInitialState);
     }, 3000);
@@ -128,6 +167,62 @@ const Product = () => {
       handleCloseModal();
     }
   };
+
+  const addCart = (data) => {
+    let updateQty = data?.qty + 1;
+    let shareData = { id: data?.id, qty: updateQty };
+
+    let cartData = JSON.parse(localStorage.getItem("cart"));
+
+    if (cartData != null && cartData != "") {
+      let updateData = cartData.find((v) => v.id == data.id);
+
+      if (updateData != undefined) {
+        if (updateData?.qty < 5) {
+          updateData.qty = updateData?.qty + 1;
+          // Find ID & Slice it
+          let findId = cartData.findIndex((v) => v.id == data.id);
+          if (findId != -1) {
+            cartData.splice(findId, 1);
+          }
+
+          cartData.push(updateData);
+          localStorage.setItem("cart", JSON.stringify(cartData));
+          // Find ID & Slice it
+        } else {
+          alert("Can't add more quantity");
+        }
+      } else {
+        cartData.push(shareData);
+        localStorage.setItem("cart", JSON.stringify(cartData));
+      }
+    } else {
+      localStorage.setItem("cart", JSON.stringify([shareData]));
+    }
+    getCountLocal();
+  };
+
+  const removeCart = (data) => {
+    if (data?.id) {
+      let findId = localCart.findIndex((v) => v.id == data.id);
+      let updateData = localCart.find((v) => v.id == data.id);
+      if (updateData?.qty > 1) {
+        updateData.qty = updateData.qty - 1;
+        localCart.splice(findId, 1);
+        localCart.push(updateData);
+        localStorage.setItem("cart", JSON.stringify(localCart));
+      } else {
+        // Find ID & Slice it
+
+        if (findId != -1) {
+          localCart.splice(findId, 1);
+          localStorage.setItem("cart", JSON.stringify(localCart));
+        }
+        // Find ID & Slice it
+      }
+    }
+    getCountLocal();
+  }
 
   return (
     <Fragment>
@@ -149,6 +244,7 @@ const Product = () => {
                     className="img-fluid"
                     src={item.image}
                     style={{ height: "140px" }}
+                    alt="productimage"
                   ></img>
                 </div>
                 <div className="col-9">
@@ -158,7 +254,26 @@ const Product = () => {
                     <h5>{item.price}</h5>
                   </div>
 
-                  <button className="btn btn-warning">Add to Cart</button>
+                  <button
+                    className="btn btn-warning"
+                    onClick={(e) => {
+                      addCart(item);
+                    }}
+                  >
+                    Add to Cart
+                  </button>
+
+                  <i
+                    className="fa-solid fa-plus text-success cursorPointer"
+                    onClick={(e) => addCart(item)}
+                  ></i>
+                  <span>{localCart?.length}</span>
+
+                  <i
+                    className="fa-solid fa-minus text-danger cursorPointer"
+                    onClick={(e) => removeCart(item)}
+                  ></i>
+
                   <button className="btn btn-success mx-2">Buy Now</button>
                   <div></div>
                 </div>

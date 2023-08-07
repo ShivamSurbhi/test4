@@ -47,38 +47,6 @@
       "price": "22",
       "category": "4",
       "id": 3
-    },
-    {
-      "name": "sdfsdf",
-      "description": "234234",
-      "image": "https://m.media-amazon.com/images/I/61Tl1z+Hn0L._AC_UY218_.jpg",
-      "price": "234",
-      "category": "4",
-      "id": 4
-    },
-    {
-      "name": "sdffadsf",
-      "description": "234234",
-      "image": "https://m.media-amazon.com/images/I/61Tl1z+Hn0L._AC_UY218_.jpg",
-      "price": "324",
-      "category": "3",
-      "id": 5
-    },
-    {
-      "name": "asdasdasdasd",
-      "description": "232323",
-      "image": "https://m.media-amazon.com/images/I/61Tl1z+Hn0L._AC_UY218_.jpg",
-      "price": "2323",
-      "category": "4",
-      "id": 6
-    },
-    {
-      "name": "ss",
-      "description": "2",
-      "image": "https://m.media-amazon.com/images/I/61Tl1z+Hn0L._AC_UY218_.jpg",
-      "price": "222",
-      "category": "4",
-      "id": 7
     }
   ]
 }
