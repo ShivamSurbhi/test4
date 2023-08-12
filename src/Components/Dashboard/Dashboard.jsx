@@ -1,7 +1,12 @@
-import { Fragment } from "react"
+import { Fragment, useEffect } from "react"
 import Menu from "../Menu/Menu"
 
 const Dashboard = () => {
+  let userDetail = { id: 1, name:'shivam',token:'shfdjkhsfnsndfm,'}
+  useEffect(() => {
+    localStorage.setItem("user", JSON.stringify(userDetail));
+  },[])
+
     return (
       <Fragment>
        
