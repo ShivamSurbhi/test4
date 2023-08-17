@@ -51,6 +51,16 @@ const Menu = () => {
   const [cartNo, setCartNo] = useState();
   const [menuLising, setMenuListing] = useState(menuList);
 
+  // Modal
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => {
+    console.log("trigger modal");
+    setShow(true);
+  };
+  // Modal
+
   useEffect(() => {
     // Getting Local Storage Data
     var localCart = JSON.parse(localStorage.getItem("cart"));
@@ -147,7 +157,7 @@ const Menu = () => {
                       Profile
                     </a>
                   </li>
-                  <li>
+                  <li onClick={handleShow}>
                     <a className="dropdown-item" href="javascript:void(0)">
                       Change Password
                     </a>
@@ -193,6 +203,18 @@ const Menu = () => {
           {/* The Route below will handle any invalid route */}
         </Routes>
       </Router>
+
+      {/* <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Modal Title</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>This is the content of the modal.</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal> */}
     </Fragment>
   );
 };
