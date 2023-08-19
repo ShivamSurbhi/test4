@@ -49,18 +49,61 @@ const Menu = () => {
   ];
 
   const [cartNo, setCartNo] = useState();
+  const [menuLising, setMenuListing] = useState(menuList);
+
+  // Modal
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => {
+    console.log("trigger modal");
+    setShow(true);
+  };
+  // Modal
 
   useEffect(() => {
-    var localCart = JSON.parse(localStorage.getItem('cart'));
+    // Getting Local Storage Data
+    var localCart = JSON.parse(localStorage.getItem("cart"));
+    // Getting Local Storage Data
+
     setCartNo(localCart);
-  }, [])
-  
-  const renderElement = menuList.map((v, i) => {
+    updateMenu();
+  }, []);
+
+  const updateMenu = () => {
+    // It will not create issue if login api triggers
+    // Getting Local Storage Data
+    var localUser = JSON.parse(localStorage.getItem("user"));
+    // Getting Local Storage Data
+    const newMenuList = menuList;
+    if (localUser) {
+      const removeList = [{ route: "/signup" }, { route: "/signin" }];
+      for (let i = 0; i < removeList.length; i++) {
+        let findIndex = newMenuList.findIndex(
+          (v) => v.route == removeList[i].route
+        );
+        if (findIndex != -1) {
+          newMenuList.splice(findIndex, 1);
+          setMenuListing(newMenuList);
+          console.log("update new", menuLising);
+        }
+      }
+    } else {
+      setMenuListing(newMenuList);
+    }
+  };
+
+  const logout = () => {
+    localStorage.removeItem("user");
+    updateMenu();
+  };
+
+  const renderElement = menuLising.map((v, i) => {
     return (
       <Fragment key={i}>
         {v.visible && (
           <li className="nav-item">
-            <Link to={v.route} className="nav-link">
+            <Link to={v.route} className="nav-link" onClick={updateMenu}>
               {v.name}
             </Link>
           </li>
@@ -114,13 +157,17 @@ const Menu = () => {
                       Profile
                     </a>
                   </li>
-                  <li>
+                  <li onClick={handleShow}>
                     <a className="dropdown-item" href="javascript:void(0)">
                       Change Password
                     </a>
                   </li>
                   <li>
-                    <a className="dropdown-item" href="javascript:void(0)">
+                    <a
+                      className="dropdown-item"
+                      href="javascript:void(0)"
+                      onClick={logout}
+                    >
                       Logout
                     </a>
                   </li>
@@ -129,13 +176,13 @@ const Menu = () => {
 
               <button
                 type="button"
-                class="btn btn-light position-relative mx-3"
+                className="btn btn-light position-relative mx-3"
               >
                 Cart
                 {cartNo?.length > 0 && (
-                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                  <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                     {cartNo?.length}
-                    <span class="visually-hidden">unread messages</span>
+                    <span className="visually-hidden">unread messages</span>
                   </span>
                 )}
               </button>
@@ -156,6 +203,18 @@ const Menu = () => {
           {/* The Route below will handle any invalid route */}
         </Routes>
       </Router>
+
+      {/* <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Modal Title</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>This is the content of the modal.</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal> */}
     </Fragment>
   );
 };
