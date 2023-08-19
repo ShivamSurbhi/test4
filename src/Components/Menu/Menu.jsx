@@ -32,13 +32,13 @@ const Menu = () => {
       id: 4,
       name: "Sign In",
       route: "/signin",
-      visible: true,
+      visible: false,
     },
     {
       id: 5,
       name: "Sign Up",
       route: "/signup",
-      visible: true,
+      visible: false,
     },
     {
       id: 6,
@@ -53,6 +53,7 @@ const Menu = () => {
 
   // Modal
   const [show, setShow] = useState(false);
+  const [userDetail, setUserDetail] = useState();
 
   const handleClose = () => setShow(false);
   const handleShow = () => {
@@ -64,8 +65,9 @@ const Menu = () => {
   useEffect(() => {
     // Getting Local Storage Data
     var localCart = JSON.parse(localStorage.getItem("cart"));
+    var localUser = JSON.parse(localStorage.getItem("user"));
     // Getting Local Storage Data
-
+    setUserDetail(localUser);
     setCartNo(localCart);
     updateMenu();
   }, []);
@@ -96,7 +98,14 @@ const Menu = () => {
   const logout = () => {
     localStorage.removeItem("user");
     updateMenu();
+    // renderAccName();
   };
+
+  function toTitleCase(str) {
+    return str.replace(/\w\S*/g, (txt) => {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+  }
 
   const renderElement = menuLising.map((v, i) => {
     return (
@@ -111,6 +120,21 @@ const Menu = () => {
       </Fragment>
     );
   });
+
+  const renderAccName = () => {
+    return (
+      <Fragment>
+        1
+        {userDetail && (
+          <Fragment>
+            Welcome
+            {userDetail?.name ? ", " + toTitleCase(userDetail?.name) : ""}
+            <br></br>
+          </Fragment>
+        )}
+      </Fragment>
+    );
+  };
 
   return (
     <Fragment>
@@ -147,30 +171,59 @@ const Menu = () => {
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  Hello, Shivam<br></br>
-                  <b>Account</b>
+                  {/* {renderAccName} */}
+
+                  {userDetail && (
+                    <Fragment>
+                      Welcome
+                      {userDetail?.name
+                        ? ", " + toTitleCase(userDetail?.name)
+                        : ""}
+                      <br></br>
+                    </Fragment>
+                  )}
+                  <b>{ userDetail ? 'Account' : 'SignUp/Signin' }</b>
                 </a>
 
                 <ul className="dropdown-menu">
-                  <li>
-                    <a className="dropdown-item" href="javascript:void(0)">
-                      Profile
-                    </a>
-                  </li>
-                  <li onClick={handleShow}>
-                    <a className="dropdown-item" href="javascript:void(0)">
-                      Change Password
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      className="dropdown-item"
-                      href="javascript:void(0)"
-                      onClick={logout}
-                    >
-                      Logout
-                    </a>
-                  </li>
+                  {userDetail && (
+                    <Fragment>
+                      <li>
+                        <a className="dropdown-item" href="javascript:void(0)">
+                          Profile
+                        </a>
+                      </li>
+
+                      <li onClick={handleShow}>
+                        <a className="dropdown-item" href="javascript:void(0)">
+                          Change Password
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          className="dropdown-item"
+                          href="javascript:void(0)"
+                          onClick={logout}
+                        >
+                          Logout
+                        </a>
+                      </li>
+                    </Fragment>
+                  )}
+
+                  {!userDetail && (
+                    <li>
+                      <a
+                        className="dropdown-item"
+                        href="javascript:void(0)"
+                        onClick={logout}
+                      >
+                        <Link to="/signin" className="nav-link">
+                          SignUp/SignIn
+                        </Link>
+                      </a>
+                    </li>
+                  )}
                 </ul>
               </div>
 

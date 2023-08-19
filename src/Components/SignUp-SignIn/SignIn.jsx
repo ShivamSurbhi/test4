@@ -1,6 +1,7 @@
 import { Fragment, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { VerifySigninThunk, fetchSignin } from "../Store";
+import { Link } from "react-router-dom";
 
 const SignIn = () => {
   const dispatch = useDispatch();
@@ -113,13 +114,22 @@ const SignIn = () => {
               Check me out
             </label>
           </div>
-          <button
-            type="submit"
-            className="btn btn-primary mt-2"
-            onClick={handleClick}
-          >
-            Submit
-          </button>
+
+          <div className="mt-4 d-flex justify-content-center">
+            <button
+              type="submit"
+              className="btn btn-primary"
+              onClick={handleClick}
+            >
+              Submit
+            </button>
+
+            <button className="mx-2 btn btn-info">
+              <Link to="/signup" className="nav-link">
+                SignUp
+              </Link>
+            </button>
+          </div>
         </form>
       </div>
     </Fragment>
