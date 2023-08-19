@@ -32,13 +32,13 @@ const Menu = () => {
       id: 4,
       name: "Sign In",
       route: "/signin",
-      visible: true,
+      visible: false,
     },
     {
       id: 5,
       name: "Sign Up",
       route: "/signup",
-      visible: true,
+      visible: false,
     },
     {
       id: 6,
@@ -182,7 +182,7 @@ const Menu = () => {
                       <br></br>
                     </Fragment>
                   )}
-                  <b>Account</b>
+                  <b>{ userDetail ? 'Account' : 'SignUp/Signin' }</b>
                 </a>
 
                 <ul className="dropdown-menu">
@@ -218,7 +218,9 @@ const Menu = () => {
                         href="javascript:void(0)"
                         onClick={logout}
                       >
-                        SignUp/SignIn
+                        <Link to="/signin" className="nav-link">
+                          SignUp/SignIn
+                        </Link>
                       </a>
                     </li>
                   )}

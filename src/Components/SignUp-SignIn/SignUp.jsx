@@ -2,7 +2,7 @@ import { type } from "@testing-library/user-event/dist/type";
 import { Fragment, useState, useContext, useEffect } from "react";
 import { useDispatch } from "react-redux";
 // import { addSignin } from "../Store";
-import { useNavigate  } from "react-router-dom";
+import { Link, useNavigate  } from "react-router-dom";
 
 const SignUp = () => {
   const dispatch = useDispatch();
@@ -183,13 +183,22 @@ if (!passwordPattern.test(formData.password)) {
             <span className="text-danger mt-2">{formError.password}</span>
           </div>
 
-          <button
-            type="submit"
-            className="btn btn-primary mt-4"
-            onClick={handleSubmit}
-          >
-            Submit
-          </button>
+          <div className="mt-4 d-flex justify-content-center">
+            <button
+              type="submit"
+              className="btn btn-primary"
+              onClick={handleSubmit}
+            >
+              Submit
+            </button>
+
+            <button
+              type="submit"
+              className="btn btn-info mx-2"
+            >
+              <Link to="/signin" className="nav-link">SignIn</Link>
+            </button>
+          </div>
         </form>
       </div>
     </Fragment>
