@@ -1,11 +1,17 @@
 import { Fragment, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { VerifySigninThunk, fetchSignin } from "../Store";
-import { Link } from "react-router-dom";
+import { VerifySigninThunk, addSignin, fetchSignin } from "../Store";
+import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import toastUtility from "../../Utilities/toastUtility";
 
 const SignIn = () => {
   const dispatch = useDispatch();
-  const { isLoading, data, errors } = useSelector((state) => {
+  const navigate = useNavigate();
+  const apiResponse = useSelector((state) => {
+    // console.clear();
+    // console.log("state.signin", state.signin);
     return state.signin;
   });
   const [formData, setFormData] = useState({
@@ -26,9 +32,8 @@ const SignIn = () => {
     }, 3000);
   }
 
-  const handleClick = (e) => {
+  const handleClick = async (e) => {
     e.preventDefault();
-
     let errObj = { email: "", password: "" };
 
     const emailPattern = /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/;
@@ -57,10 +62,37 @@ const SignIn = () => {
     if (!isObjectEmpty) {
       SetError(errObj);
       removeErr();
+      console.log("isObjectEmpty", errObj);
+      toastUtility.toastMessage("Form is not valid.", "warn");
     } else {
-      localStorage.setItem("userDetail", JSON.stringify(formData));
-      dispatch(fetchSignin(formData));
-      console.log("data", data);
+ 
+
+      try {
+        const response = await dispatch(VerifySigninThunk(formData));
+
+        console.log("response", response);
+        let respErrorStatus = response?.error ? true : false;
+        toastUtility.toastMessage(
+          {
+            pending: "Please wait",
+            success: "Login Successfully 👌",
+            error: "Incorrect Credentials 🤯",
+            status: respErrorStatus,
+          },
+          "promise"
+        );
+
+        if (!respErrorStatus) {
+          localStorage.setItem(
+            "userDetail",
+            JSON.stringify(response.payload.data)
+          );
+          navigate("/dashboard");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+   
       SetError(errorInitialState);
     }
   };
@@ -103,16 +135,6 @@ const SignIn = () => {
             />
 
             <span className="text-danger">{error.password}</span>
-          </div>
-          <div className="form-check mt-2">
-            <input
-              type="checkbox"
-              className="form-check-input"
-              id="exampleCheck1"
-            />
-            <label className="form-check-label" htmlFor="exampleCheck1">
-              Check me out
-            </label>
           </div>
 
           <div className="mt-4 d-flex justify-content-center">
