@@ -82,3 +82,14 @@
     transform: rotate(360deg);
   }
 }
+
+
+.toast-html {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  padding: 10px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  color: #721c24;
+  line-height: 1.5;
+}

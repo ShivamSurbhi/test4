@@ -6,13 +6,15 @@ import reportWebVitals from "./reportWebVitals";
 import { NavigationProvider } from "./context/navigation";
 import { Provider as ReactReduxProvider } from "react-redux";
 import { StoreConfig } from "./Components/Store";
+import { ToastContainer, toast } from "react-toastify";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <ReactReduxProvider store={(StoreConfig)}>
+  <ReactReduxProvider store={StoreConfig}>
     <NavigationProvider>
       <React.StrictMode>
         <App />
+        <ToastContainer />
       </React.StrictMode>
     </NavigationProvider>
   </ReactReduxProvider>
